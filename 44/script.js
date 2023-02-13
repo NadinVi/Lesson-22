@@ -27,18 +27,17 @@ form.addEventListener("submit", e => {
 
     }
 
-    btnComments.addEventListener("submit", e => {
-        e.preventDefault();
-    
-        controller(`${API}/comments`)
-            .then(data => {
-                data.forEach(comments => {
+        btnComments.addEventListener("submit", e => {
+            e.preventDefault();
+
+                controller(`${API}/comments`)
+                .then(data => {
+                    data.forEach(comments => {
                     if (inputSearch.value === comments.id) {
                         renderComments(cardContainer, data);
                     }
                 })
             });
-    
     })
 
 })
@@ -63,7 +62,6 @@ function renderCardPosts(container, post) {
 
     titlePost.innerText = post.title;
     divCard.innerText = post.body;
-
 
     postCard.append(titlePost);
     postCard.append(divCard);
