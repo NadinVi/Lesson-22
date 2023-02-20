@@ -5,15 +5,14 @@
 
 
 const API = "https://jsonplaceholder.typicode.com";
-const controller = action => fetch(action).then(data => data.json()).catch(error => console.error(error));
+const controller = action => fetch(action).then(data => data.json());
 
 let inputSearch = document.querySelector("input[name=searchPost]").value;
 const form = document.querySelector(".form");
 const cardContainer = document.querySelector(".container");
-
+const comentContainer = document.createElement("div");
+const wrapper = document.querySelector(".wrapper");
 const btnComments = document.querySelector(".comments");
-// btnComments.innerText = "Coments";
-
 
 
 form.addEventListener("submit", e => {
@@ -27,17 +26,29 @@ form.addEventListener("submit", e => {
 
     }
 
-        btnComments.addEventListener("submit", e => {
-            e.preventDefault();
+    btnComments.addEventListener("click", () => {
+        controller(`${API}/posts/${inputSearch}/comments`)
+            .then(responce => {
+                responce.forEach(coment => {
+                    //console.log(coment);
+                    const div = document.createElement("div");
+                    const h3 = document.createElement("h3");
+                    const body = document.createElement("p");
+                    const email = document.createElement("p");
 
-                controller(`${API}/comments`)
-                .then(data => {
-                    data.forEach(comments => {
-                    if (inputSearch.value === comments.id) {
-                        renderComments(cardContainer, data);
-                    }
+                    h3.innerText = `${coment.name}`;
+                    body.innerText = `${coment.body}`;
+                    email.innerText = `${coment.email}`;
+
+                    div.append(h3);
+                    div.append(body);
+                    div.append(email);
+                    comentContainer.append(div);
+                    wrapper.append(comentContainer);
+
                 })
-            });
+            })
+
     })
 
 })
@@ -65,17 +76,7 @@ function renderCardPosts(container, post) {
 
     postCard.append(titlePost);
     postCard.append(divCard);
-    container.append(postCard);
-
+    cardContainer.append(postCard);
 }
 
-
-
-function renderComments(container, comments) {
-    const commentName = document.createElement("h2");
-
-    commentName.innerText = comments.name;
-
-    container.append(commentName);
-}
 
